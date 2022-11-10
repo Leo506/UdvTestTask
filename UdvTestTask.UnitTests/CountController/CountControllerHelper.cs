@@ -5,7 +5,7 @@ namespace UdvTestTask.UnitTests.CountController;
 
 public static class CountControllerHelper
 {
-    public static void MakeAccountService(Mock<IAccountService> account, bool isAuthorized = true)
+    public static void MakeAccountService(Mock<IAuthService> account, bool isAuthorized = true)
     {
         account.Setup(service => service.IsAuthorized()).Returns(isAuthorized);
     }

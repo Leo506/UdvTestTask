@@ -14,23 +14,23 @@ namespace UdvTestTask.UnitTests.CountController;
 public class CountControllerTests
 {
     [Theory, AutoMoqData]
-    public async Task Count_OnCall_AccountServiceInvoke([Frozen] Mock<IAccountService> accountService,
+    public async Task Count_OnCall_AccountServiceInvoke([Frozen] Mock<IAuthService> authService,
         [Greedy] Controllers.CountController sut)
     {
         // act
         await sut.Count();
         
         // assert
-        accountService.Invocations.Count.Should().Be(1);
+        authService.Invocations.Count.Should().Be(1);
     }
 
     [Theory, AutoMoqData]
-    public async Task Count_UserAuthorized_LetterCountServiceInvoke([Frozen] Mock<IAccountService> account,
+    public async Task Count_UserAuthorized_LetterCountServiceInvoke([Frozen] Mock<IAuthService> authService,
         [Frozen] Mock<ILetterCountService> counter,
         [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(account);
+        CountControllerHelper.MakeAccountService(authService);
         
         // act
         await sut.Count();
@@ -40,11 +40,11 @@ public class CountControllerTests
     }
 
     [Theory, AutoMoqData]
-    public async Task Count_UserAuthorized_PageServiceInvoke([Frozen] Mock<IAccountService> account,
+    public async Task Count_UserAuthorized_PageServiceInvoke([Frozen] Mock<IAuthService> authService,
         [Frozen] Mock<IPageService> pageService, [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(account);
+        CountControllerHelper.MakeAccountService(authService);
 
         // act
         await sut.Count();
@@ -54,7 +54,7 @@ public class CountControllerTests
     }
 
     [Theory, AutoMoqData]
-    public async Task Count_UserUnauthorized_ReturnsStatusCode401([Frozen] Mock<IAccountService> accountService,
+    public async Task Count_UserUnauthorized_ReturnsStatusCode401([Frozen] Mock<IAuthService> accountService,
         [Greedy] Controllers.CountController sut)
     {
         // arrange
@@ -69,11 +69,11 @@ public class CountControllerTests
     }
 
     [Theory, AutoMoqData]
-    public async Task Count_AllGood_ReturnsLettersCount([Frozen] Mock<IAccountService> account,
+    public async Task Count_AllGood_ReturnsLettersCount([Frozen] Mock<IAuthService> authService,
         [Frozen] Mock<ILetterCountService> counter, [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(account);
+        CountControllerHelper.MakeAccountService(authService);
 
         var expectedDict = new Dictionary<char, int>()
         {
@@ -94,11 +94,11 @@ public class CountControllerTests
 
 
     [Theory, AutoMoqData]
-    public async Task Count_UserAuthorized_LoggerInvoke([Frozen] Mock<IAccountService> account,
+    public async Task Count_UserAuthorized_LoggerInvoke([Frozen] Mock<IAuthService> authService,
         [Frozen] Mock<ILogger<Controllers.CountController>> logger, [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(account);
+        CountControllerHelper.MakeAccountService(authService);
         
         // act
         await sut.Count();
@@ -108,12 +108,12 @@ public class CountControllerTests
     }
 
     [Theory, AutoMoqData]
-    public async Task Count_UserAuthorized_SaveResultInDatabase([Frozen] Mock<IAccountService> account,
+    public async Task Count_UserAuthorized_SaveResultInDatabase([Frozen] Mock<IAuthService> authService,
         [Frozen] Mock<ILetterCountService> counter,
         [Frozen] Mock<IRepository<LettersCount>> repository, [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(account);
+        CountControllerHelper.MakeAccountService(authService);
 
         counter.Setup(service => service.Count()).Returns(new Dictionary<char, int>()
         {

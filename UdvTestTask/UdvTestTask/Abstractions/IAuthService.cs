@@ -6,4 +6,6 @@ namespace UdvTestTask.Abstractions;
 public interface IAuthService
 {
     Task<OperationResult<bool>> TryAuthAsync(UserModel user);
+
+    public bool IsAuthorized();
 }

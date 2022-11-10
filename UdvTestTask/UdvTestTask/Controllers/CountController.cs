@@ -10,16 +10,16 @@ public class CountController : Controller
 {
     private readonly ILetterCountService _countService;
     private readonly IPageService _pageService;
-    private readonly IAccountService _accountService;
+    private readonly IAuthService _authService;
     private readonly ILogger<CountController> _logger;
     private readonly IRepository<LettersCount> _repository;
 
-    public CountController(ILetterCountService countService, IPageService pageService, IAccountService accountService,
+    public CountController(ILetterCountService countService, IPageService pageService, IAuthService authService,
         ILogger<CountController> logger, IRepository<LettersCount> repository)
     {
         _countService = countService;
         _pageService = pageService;
-        _accountService = accountService;
+        _authService = authService;
         _logger = logger;
         _repository = repository;
     }
@@ -27,7 +27,7 @@ public class CountController : Controller
     [HttpGet]
     public async Task<ActionResult<Dictionary<char, int>>> Count()
     {
-        if (!_accountService.IsAuthorized())
+        if (!_authService.IsAuthorized())
             return Unauthorized();
         
         _logger.LogInformation($"Start letter counting");
