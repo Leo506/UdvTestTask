@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using UdvTestTask.Abstractions;
 using UdvTestTask.Models;
 
 namespace UdvTestTask.Data;
 
-public partial class LettersCountDbContext : DbContext
+public sealed partial class LettersCountDbContext : DbContext, IRepository<LettersCount>
 {
     public LettersCountDbContext()
     {
@@ -12,9 +13,10 @@ public partial class LettersCountDbContext : DbContext
     public LettersCountDbContext(DbContextOptions<LettersCountDbContext> options)
         : base(options)
     {
+        Database.EnsureCreated();
     }
 
-    public virtual DbSet<LettersCount> LettersCounts { get; set; } = null!;
+    private DbSet<LettersCount> LettersCounts { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,4 +31,9 @@ public partial class LettersCountDbContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    public async Task AddAsync(LettersCount entity)
+    {
+        await LettersCounts.AddAsync(entity);
+        await SaveChangesAsync();
+    }
 }
