@@ -16,7 +16,7 @@ public class LetterCounter : ILetterCountService
             if (string.IsNullOrEmpty(post.Content)) 
                 continue;
             
-            foreach (var c in post.Content.Where(char.IsLetterOrDigit))
+            foreach (var c in post.Content.Where(char.IsLetter))
             {
                 var character = char.ToLower(c);
                 if (result.ContainsKey(character))

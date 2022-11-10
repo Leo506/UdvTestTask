@@ -163,4 +163,29 @@ public class LetterCounterTests
         // assert
         result.Should().BeEmpty();
     }
+
+    [Fact]
+    public void Count_PostsContainsDigits_IgnoreDigits()
+    {
+        // arrange
+        var expectedDict = new Dictionary<char, int>()
+        {
+            ['a'] = 1,
+            ['b'] = 1,
+            ['c'] = 1
+        };
+        
+        var sut = new LetterCounter();
+
+        // act
+        var resultDict = sut.Count(new PostModel()
+        {
+            Content = "a0b1c2"
+        });
+
+        var result = resultDict.SequenceEqual(expectedDict);
+
+        // assert
+        result.Should().BeTrue();
+    }
 }
