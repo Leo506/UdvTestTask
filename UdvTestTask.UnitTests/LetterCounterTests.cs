@@ -149,4 +149,17 @@ public class LetterCounterTests
         // assert
         result.Should().BeEmpty();
     }
+
+    [Fact]
+    public void Count_PostsIsNull_ReturnsEmpty()
+    {
+        // arrange
+        var sut = new LetterCounter();
+
+        // act
+        var result = sut.Count(null);
+        
+        // assert
+        result.Should().BeEmpty();
+    }
 }

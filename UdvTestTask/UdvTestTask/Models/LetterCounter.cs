@@ -2,9 +2,11 @@
 
 public class LetterCounter
 {
-    public IDictionary<char, int> Count(params PostModel[] posts)
+    public IDictionary<char, int> Count(params PostModel[]? posts)
     {
         var result = new SortedDictionary<char, int>();
+        if (posts is null)
+            return result;
 
         foreach (var post in posts)
         {
