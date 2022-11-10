@@ -10,7 +10,7 @@ using UdvTestTask.UnitTests.FixtureAttributes;
 
 namespace UdvTestTask.UnitTests.CountController;
 
-public class CountControllerTests
+public partial class CountControllerTests
 {
     [Theory, AutoMoqData]
     public async Task Count_OnCall_AccountServiceInvoke([Frozen] Mock<IAuthService> authService,
@@ -29,7 +29,7 @@ public class CountControllerTests
         [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(authService);
+        MakeAccountService(authService);
         
         // act
         await sut.Count();
@@ -43,7 +43,7 @@ public class CountControllerTests
         [Frozen] Mock<IPageService> pageService, [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(authService);
+        MakeAccountService(authService);
 
         // act
         await sut.Count();
@@ -72,7 +72,7 @@ public class CountControllerTests
         [Frozen] Mock<ILetterCountService> counter, [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(authService);
+        MakeAccountService(authService);
 
         var expectedDict = new Dictionary<char, int>()
         {
@@ -81,7 +81,7 @@ public class CountControllerTests
             ['c'] = 3
         };
         
-        counter.Setup(service => service.Count()).Returns(expectedDict);
+        counter.Setup(service => service.Count(It.IsAny<PostModel[]>())).Returns(expectedDict);
         
         // act
         var response = await sut.Count();
@@ -97,7 +97,7 @@ public class CountControllerTests
         [Frozen] Mock<ILogger<Controllers.CountController>> logger, [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(authService);
+        MakeAccountService(authService);
         
         // act
         await sut.Count();
@@ -112,9 +112,9 @@ public class CountControllerTests
         [Frozen] Mock<IRepository<LettersCount>> repository, [Greedy] Controllers.CountController sut)
     {
         // arrange
-        CountControllerHelper.MakeAccountService(authService);
+        MakeAccountService(authService);
 
-        counter.Setup(service => service.Count()).Returns(new Dictionary<char, int>()
+        counter.Setup(service => service.Count(It.IsAny<PostModel[]>())).Returns(new Dictionary<char, int>()
         {
             ['a'] = 1,
             ['b'] = 2

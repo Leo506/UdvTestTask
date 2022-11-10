@@ -33,7 +33,7 @@ public class CountController : Controller
         _logger.LogInformation($"Start letter counting");
         
         var posts = await _pageService.GetLastPosts();
-        var result = _countService.Count(posts.ToArray());
+        var result = _countService.Count(posts.Result?.ToArray());
         
         await _repository.AddAsync(new LettersCount()
         {

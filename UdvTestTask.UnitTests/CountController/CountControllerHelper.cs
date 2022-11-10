@@ -3,10 +3,11 @@ using UdvTestTask.Abstractions;
 
 namespace UdvTestTask.UnitTests.CountController;
 
-public static class CountControllerHelper
+public partial class CountControllerTests
 {
-    public static void MakeAccountService(Mock<IAuthService> account, bool isAuthorized = true)
+    private static void MakeAccountService(Mock<IAuthService> account, bool isAuthorized = true)
     {
         account.Setup(service => service.IsAuthorized()).Returns(isAuthorized);
     }
+    
 }
