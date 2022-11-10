@@ -1,6 +1,7 @@
 using FluentAssertions;
 using UdvTestTask.Extensions;
 using UdvTestTask.Models;
+using UdvTestTask.Services;
 
 namespace UdvTestTask.UnitTests;
 

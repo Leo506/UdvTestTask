@@ -6,7 +6,9 @@ using UdvTestTask.Models;
 
 namespace UdvTestTask.Controllers;
 
-public class CountController : Controller
+[ApiController]
+[Route("[controller]")]
+public class CountController : ControllerBase
 {
     private readonly ILetterCountService _countService;
     private readonly IPageService _pageService;
@@ -33,6 +35,8 @@ public class CountController : Controller
         _logger.LogInformation($"Start letter counting");
         
         var posts = await _pageService.GetLastPosts();
+        if (!posts.Ok)
+            return BadRequest();
         var result = _countService.Count(posts.Result?.ToArray());
         
         await _repository.AddAsync(new LettersCount()

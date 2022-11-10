@@ -1,6 +1,9 @@
-﻿namespace UdvTestTask.Models;
+﻿using UdvTestTask.Abstractions;
+using UdvTestTask.Models;
 
-public class LetterCounter
+namespace UdvTestTask.Services;
+
+public class LetterCounter : ILetterCountService
 {
     public IDictionary<char, int> Count(params PostModel[]? posts)
     {

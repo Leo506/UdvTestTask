@@ -26,7 +26,12 @@ public class PageService : IPageService
                 Count = 5
             });
 
-            result.Result = posts.WallPosts.Select(post => new PostModel() { Content = post.Text }).ToList();
+            result.Result = posts.WallPosts.Select(post => new PostModel()
+            {
+                Content = string.IsNullOrEmpty(post.Text)
+                    ? string.Concat(post.CopyHistory.Select(p => p.Text))
+                    : post.Text
+            }).ToList();
         }
         catch (Exception e)
         {

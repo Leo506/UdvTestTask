@@ -1,8 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using UdvTestTask.Abstractions;
 using UdvTestTask.Data;
+using UdvTestTask.Models;
 using UdvTestTask.Services;
 using VkNet;
+using VkNet.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +15,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<LettersCountDbContext>(optionsBuilder =>
-    optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("postgres")));
+builder.Services
+    .AddSingleton<IVkApi, VkApi>(provider => new VkApi())
+    .AddSingleton<ILetterCountService, LetterCounter>()
+    .AddSingleton<IPageService, PageService>()
+    .AddDbContext<LettersCountDbContext>(optionsBuilder =>
+        optionsBuilder.UseNpgsql(builder.Configuration.GetConnectionString("postgres")))
+    .AddScoped<IRepository<LettersCount>, LettersCountDbContext>()
+    .AddSingleton<IAuthService, AuthService>(provider =>
+        new AuthService(ulong.Parse(builder.Configuration["AppId:Id"]), provider.GetRequiredService<IVkApi>()));
 
-builder.Services.AddSingleton<IAuthService, AuthService>(provider =>
-    new AuthService(ulong.Parse(builder.Configuration["AppId:Id"]), new VkApi()));
 
 var app = builder.Build();
 

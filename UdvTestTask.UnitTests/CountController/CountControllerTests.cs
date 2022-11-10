@@ -24,12 +24,13 @@ public partial class CountControllerTests
     }
 
     [Theory, AutoMoqData]
-    public async Task Count_UserAuthorized_LetterCountServiceInvoke([Frozen] Mock<IAuthService> authService,
+    public async Task Count_UserAuthorized_LetterCountServiceInvoke([Frozen] Mock<IAuthService> authService, [Frozen] Mock<IPageService> page,
         [Frozen] Mock<ILetterCountService> counter,
         [Greedy] Controllers.CountController sut)
     {
         // arrange
         MakeAccountService(authService);
+        MakePageService(page);
         
         // act
         await sut.Count();
@@ -69,10 +70,12 @@ public partial class CountControllerTests
 
     [Theory, AutoMoqData]
     public async Task Count_AllGood_ReturnsLettersCount([Frozen] Mock<IAuthService> authService,
+        [Frozen] Mock<IPageService> page,
         [Frozen] Mock<ILetterCountService> counter, [Greedy] Controllers.CountController sut)
     {
         // arrange
         MakeAccountService(authService);
+        MakePageService(page);
 
         var expectedDict = new Dictionary<char, int>()
         {
@@ -80,13 +83,13 @@ public partial class CountControllerTests
             ['b'] = 2,
             ['c'] = 3
         };
-        
+
         counter.Setup(service => service.Count(It.IsAny<PostModel[]>())).Returns(expectedDict);
-        
+
         // act
         var response = await sut.Count();
         var result = ((response.Result as OkObjectResult)!.Value as Dictionary<char, int>)!.SequenceEqual(expectedDict);
-        
+
         // assert
         result.Should().BeTrue();
     }
@@ -94,32 +97,35 @@ public partial class CountControllerTests
 
     [Theory, AutoMoqData]
     public async Task Count_UserAuthorized_LoggerInvoke([Frozen] Mock<IAuthService> authService,
+        [Frozen] Mock<IPageService> page,
         [Frozen] Mock<ILogger<Controllers.CountController>> logger, [Greedy] Controllers.CountController sut)
     {
         // arrange
         MakeAccountService(authService);
-        
+        MakePageService(page);
+
         // act
         await sut.Count();
-        
+
         // assert
         logger.Invocations.Count.Should().Be(2);
     }
 
     [Theory, AutoMoqData]
     public async Task Count_UserAuthorized_SaveResultInDatabase([Frozen] Mock<IAuthService> authService,
-        [Frozen] Mock<ILetterCountService> counter,
+        [Frozen] Mock<ILetterCountService> counter, [Frozen] Mock<IPageService> page,
         [Frozen] Mock<IRepository<LettersCount>> repository, [Greedy] Controllers.CountController sut)
     {
         // arrange
         MakeAccountService(authService);
+        MakePageService(page);
 
         counter.Setup(service => service.Count(It.IsAny<PostModel[]>())).Returns(new Dictionary<char, int>()
         {
             ['a'] = 1,
             ['b'] = 2
         });
-        
+
         repository.Setup(rep => rep.AddAsync(new LettersCount()
         {
             LettersData = "{\"a\":1,\"b\":2}"
