@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using UdvTestTask.Abstractions;
 using UdvTestTask.Data;
 using UdvTestTask.Models;
@@ -6,7 +7,12 @@ using UdvTestTask.Services;
 using VkNet;
 using VkNet.Abstractions;
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Hour, rollOnFileSizeLimit: true)
+    .CreateLogger();
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
 // Add services to the container.
 
@@ -42,3 +48,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+Log.CloseAndFlush();
