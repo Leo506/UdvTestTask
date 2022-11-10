@@ -11,6 +11,5 @@
 В качестве UI для взаимодействия с backend частью использовать Swagger
 
 ## Результат
-
-https://user-images.githubusercontent.com/64748654/201067947-46e87237-c8a4-4c17-958e-8c94a1db6e91.mp4
+https://user-images.githubusercontent.com/64748654/201069196-40aeaaf1-ef90-44de-8b00-d5edb2b4b657.mp4
 
