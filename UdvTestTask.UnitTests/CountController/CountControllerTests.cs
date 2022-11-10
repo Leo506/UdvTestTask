@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using UdvTestTask.Abstractions;
-using UdvTestTask.Data;
 using UdvTestTask.Models;
 using UdvTestTask.UnitTests.FixtureAttributes;
 

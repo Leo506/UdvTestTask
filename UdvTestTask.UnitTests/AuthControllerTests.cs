@@ -63,7 +63,7 @@ public class AuthControllerTests
     public async Task Auth_UserModelHasErrors_ReturnsStatusCode400([Greedy] AuthController sut)
     {
         // arrange
-        sut.ViewData.ModelState.AddModelError("error", "error");
+        sut.ModelState.AddModelError("error", "error");
 
         // act
         var response = await sut.Auth(new UserModel());

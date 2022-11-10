@@ -4,7 +4,9 @@ using UdvTestTask.Models;
 
 namespace UdvTestTask.Controllers;
 
-public class AuthController : Controller
+[ApiController]
+[Route("[controller]")]
+public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
 
@@ -13,6 +15,7 @@ public class AuthController : Controller
         _authService = authService;
     }
 
+    [HttpPost]
     public async Task<IActionResult> Auth([FromBody] UserModel user)
     {
         if (!ModelState.IsValid)
